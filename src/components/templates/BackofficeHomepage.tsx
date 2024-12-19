@@ -1,9 +1,9 @@
 import BackofficeNavBar from "../organisms/BackofficeNavBar"
-import ProductsPage from "../organisms/ProductsPage"
+import ProductsPage from "./ProductsPage"
 
 const BackofficeHomepage = () => {
     return (
-        <div className="mx-10 my-6 flex">
+        <div className="flex">
             <BackofficeNavBar />
             <ProductsPage />
         </div>
