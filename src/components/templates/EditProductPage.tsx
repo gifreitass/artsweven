@@ -1,5 +1,6 @@
 import SaveButton from "../atoms/SaveButton"
 import BackofficeNavBar from "../organisms/BackofficeNavBar"
+import ProductForm from "../organisms/ProductForm"
 
 const EditProductPage = () => {
     return (
@@ -10,6 +11,7 @@ const EditProductPage = () => {
                     <h1 className="font-semibold text-3xl">Editar produto X</h1>
                     <SaveButton />
                 </div>
+                <ProductForm />
             </div>
         </div>
     )
