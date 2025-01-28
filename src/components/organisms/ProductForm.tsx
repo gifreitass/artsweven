@@ -26,6 +26,7 @@ const ProductForm = () => {
         },
     })
 
+    //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
         try {
             const createdProduct = await postCreateProduct({
