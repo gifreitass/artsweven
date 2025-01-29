@@ -1,7 +1,7 @@
 import Link from "next/link"
 
-const ProductCard: React.FC<{ name: string, value: number, image: string }> = (props) => {
-    const { name, value, image } = props
+const ProductCard: React.FC<{ name: string, value: number, image: string, id: number }> = (props) => {
+    const { name, value, image, id } = props
             
     return (
         <div className="bg-white rounded-lg px-7 py-5 flex justify-between items-center">
@@ -13,7 +13,7 @@ const ProductCard: React.FC<{ name: string, value: number, image: string }> = (p
                 </div>
             </div>
             <div>
-                <Link href="/backoffice/products/id"><img className="w-7 cursor-pointer" src={"/images/editing.png"} alt="edit icon" /></Link>
+                <Link href={`/backoffice/products/${id}`}><img className="w-7 cursor-pointer" src={"/images/editing.png"} alt="edit icon" /></Link>
             </div>
         </div>
     )

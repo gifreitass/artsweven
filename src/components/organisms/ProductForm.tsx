@@ -2,6 +2,8 @@
 import postCreateProduct from "@/services/api/postCreateProduct"
 import { zodResolver } from "@hookform/resolvers/zod"
 import MDEditor from "@uiw/react-md-editor"
+import { useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from 'zod'
@@ -16,6 +18,9 @@ const formSchema = z.object({
 type Schema = z.infer<typeof formSchema>
 
 const ProductForm = () => {
+    const params = useParams()
+    const router = useRouter()
+
     const { register, handleSubmit, control, formState: { errors } } = useForm<Schema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -28,20 +33,25 @@ const ProductForm = () => {
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
-        try {
-            const createdProduct = await postCreateProduct({
-                name: data.name,
-                description: data.description,
-                value: data.value,
-                image: data.image
-            })
-            toast.success('Produto criado')
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message)
-                return
+        if (params.id === 'create') {
+            try {
+                const createdProduct = await postCreateProduct({
+                    name: data.name,
+                    description: data.description,
+                    value: data.value,
+                    image: data.image
+                })
+                toast.success('Produto criado')
+                router.push('/backoffice/products')
+            } catch (error) {
+                if (error instanceof Error) {
+                    toast.error(error.message)
+                    return
+                }
+                toast.error("Erro ao criar produto")
             }
-            toast.error("Erro ao criar produto")
+        } else {
+            console.log('editar')
         }
     }
 
