@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import MDEditor from "@uiw/react-md-editor"
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from 'zod'
@@ -17,22 +18,26 @@ const formSchema = z.object({
 
 type Schema = z.infer<typeof formSchema>
 
-const ProductForm = () => {
+const ProductForm: React.FC<{ product?: IProduct }> = (props) => {
+    const { product } = props
     const params = useParams()
     const router = useRouter()
+
+    console.log(product)
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<Schema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            value: 0,
-            description: "",
-            image: ""
+            name: product?.name,
+            value: product?.value,
+            description: product?.description,
+            image: product?.image
         },
     })
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
+        // novo produto - criar produto
         if (params.id === 'create') {
             try {
                 const createdProduct = await postCreateProduct({
@@ -50,9 +55,11 @@ const ProductForm = () => {
                 }
                 toast.error("Erro ao criar produto")
             }
-        } else {
-            console.log('editar')
-        }
+            return
+        } 
+
+        // produto existente - atualizar produto
+        
     }
 
     return (
