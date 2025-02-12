@@ -9,6 +9,9 @@ const EditProductPage: React.FC<{ productId: string }> = (props) => {
     const [isLoading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
+        if (props.productId === 'create') {
+            return
+        }
         const fetchData = async () => {
             setLoading(true)
             const result = await getProductById(props.productId)
@@ -29,9 +32,10 @@ const EditProductPage: React.FC<{ productId: string }> = (props) => {
             <BackofficeNavBar />
             <div className="px-20 py-14 bg-gray-100 w-screen h-screen">
                 <div>
-                    <h1 className="font-semibold text-3xl">Editar produto X</h1>
+                    {props.productId === 'create' ? <h1 className="font-semibold text-3xl">Criar produto</h1> : 
+                    <h1 className="font-semibold text-3xl">Editar {product?.name}</h1>}
                 </div>
-                {!isLoading && <ProductForm product={product} />}
+                {!isLoading && <ProductForm productId={props.productId} product={product} />}
             </div>
         </div>
     )
