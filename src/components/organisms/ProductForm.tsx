@@ -1,10 +1,10 @@
 "use client"
 import postCreateProduct from "@/services/api/postCreateProduct"
+import putProduct from "@/services/api/putProduct"
 import { zodResolver } from "@hookform/resolvers/zod"
 import MDEditor from "@uiw/react-md-editor"
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as z from 'zod'
@@ -18,12 +18,10 @@ const formSchema = z.object({
 
 type Schema = z.infer<typeof formSchema>
 
-const ProductForm: React.FC<{ product?: IProduct }> = (props) => {
+const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props) => {
     const { product } = props
     const params = useParams()
     const router = useRouter()
-
-    console.log(product)
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<Schema>({
         resolver: zodResolver(formSchema),
@@ -56,10 +54,24 @@ const ProductForm: React.FC<{ product?: IProduct }> = (props) => {
                 toast.error("Erro ao criar produto")
             }
             return
-        } 
+        }
 
         // produto existente - atualizar produto
-        
+        try {
+            const updatedProduct = await putProduct(Number(props.productId), {
+                name: data.name,
+                description: data.description,
+                value: data.value,
+                image: data.image
+            })
+            toast.success('Produto atualizado')
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message)
+                return
+            }
+            toast.error("Erro ao atualizar produto")
+        }
     }
 
     return (
@@ -73,7 +85,7 @@ const ProductForm: React.FC<{ product?: IProduct }> = (props) => {
 
             {/* value input */}
             <label className="text-sm font-semibold" htmlFor="value">Valor</label>
-            <input className="h-8 rounded-md border border-[#273056] p-2" {...register("value", { required: "Campo obrigatório" })} type="number" />
+            <input className="h-8 rounded-md border border-[#273056] p-2" {...register("value", { required: "Campo obrigatório" })} type="decimal" />
             {errors.value && <span className="text-sm text-red-700 font-semibold">{errors.value.message}</span>}
 
             {/* image input */}
