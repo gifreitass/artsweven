@@ -1,4 +1,4 @@
-const getProducts = async () => {
+const getProducts = async () : Promise<IProductDb[]> => {
     const response = await fetch("http://localhost:3001/product")
 
     const result = await response.json()
