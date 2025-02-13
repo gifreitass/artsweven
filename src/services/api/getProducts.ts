@@ -1,4 +1,6 @@
-const getProducts = async () : Promise<IProductDb[]> => {
+import adaptProductDb from "@/shared/adapters/adaptProductDb"
+
+const getProducts = async () : Promise<IProduct[]> => {
     const response = await fetch("http://localhost:3001/product")
 
     const result = await response.json()
@@ -7,7 +9,14 @@ const getProducts = async () : Promise<IProductDb[]> => {
         throw new Error(result.error.message)
     }
 
-    return result.data
+    const adaptedProducts = result.data.map((product: IProductDb) => {
+        return adaptProductDb(product)
+    })
+
+    //código mais limpo:
+    //const adaptedProducts = result.data.map(adaptProductDb)
+
+    return adaptedProducts
 }
 
 export default getProducts
