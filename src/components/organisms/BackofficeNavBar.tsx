@@ -8,7 +8,7 @@ const BackofficeNavBar = () => {
             <div className="pl-3 gap-4 flex flex-col">
                 <Link href='/backoffice'><BackofficeNavItems image="/images/price.png">Pedidos</BackofficeNavItems></Link>
                 <Link href='/backoffice/products'><BackofficeNavItems image="/images/label.png">Produtos</BackofficeNavItems></Link>
-                <Link href='/backoffice'><BackofficeNavItems image="/images/category.png">Categorias</BackofficeNavItems></Link>
+                <Link href='/backoffice/categories'><BackofficeNavItems image="/images/category.png">Categorias</BackofficeNavItems></Link>
             </div>
         </nav>
     )
