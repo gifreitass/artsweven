@@ -13,3 +13,9 @@ interface IProductDb {
     value: number,
     image: string
 }
+
+interface ICategory {
+    id: number,
+    name: string,
+    enabled?: boolean
+}
