@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 const useCategoryList = () => {
-    const [categories, setCategories] = useState<ICategory[]>()
+    const [categories, setCategories] = useState<ICategory[]>([])
 
     useEffect(() => {
         try {
@@ -21,7 +21,11 @@ const useCategoryList = () => {
         }
     }, [])
 
-    return categories
+    const addCategory = (newCategory: ICategory) => {
+        setCategories([...categories, newCategory])
+    }
+
+    return { categories, addCategory }
 }
 
 export default useCategoryList

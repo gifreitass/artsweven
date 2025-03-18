@@ -3,7 +3,7 @@ interface postCreateCategory {
     enabled?: boolean
 }
 
-const postCreateCategory = async (category: postCreateCategory) => {
+const postCreateCategory = async (category: postCreateCategory): Promise<ICategory> => {
     const response = await fetch("http://localhost:3001/category", {
         method: "POST",
         headers: {
@@ -18,7 +18,7 @@ const postCreateCategory = async (category: postCreateCategory) => {
         throw new Error(result.error.message)
     }
 
-    return result
+    return result.data
 }
 
 export default postCreateCategory
