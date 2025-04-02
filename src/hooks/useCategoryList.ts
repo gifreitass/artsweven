@@ -25,7 +25,12 @@ const useCategoryList = () => {
         setCategories([...categories, newCategory])
     }
 
-    return { categories, addCategory }
+    const removeCategory = (categoryId: number) => {
+        const removedCategory = categories.filter((category) => category.id !== categoryId)
+        setCategories(removedCategory)
+    }
+
+    return { categories, addCategory, removeCategory }
 }
 
 export default useCategoryList
