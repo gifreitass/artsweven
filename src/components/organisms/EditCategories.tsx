@@ -20,6 +20,7 @@ const EditCategories = () => {
                 enabled: true
             })
             addCategory(createdCategory)
+            setCategoryName('')
             toast.success('Categoria criada')
         } catch (error) {
             if (error instanceof Error) {
@@ -32,7 +33,7 @@ const EditCategories = () => {
 
     const clickDeleteCategory = async (categoryId: number) => {
         try {
-            const deletedCategory = await deleteCategory(categoryId)
+            await deleteCategory(categoryId)
             removeCategory(categoryId)
             toast.success('Categoria deletada')
         } catch (error) {
@@ -45,18 +46,18 @@ const EditCategories = () => {
     }
 
     return (
-        <div className="w-96">
+        <div className="w-1/2">
             <div className="flex flex-col gap-3">
                 <label className="font-semibold" htmlFor="category">Nova Categoria</label>
                 <div className="flex gap-3 items-center">
-                    <input onChange={handleChange} name="category" type="text" className="w-full h-8 rounded-md border border-[#273056] p-2" />
+                    <input value={categoryName} onChange={handleChange} name="category" type="text" className="w-full h-8 rounded-md border border-[#273056] p-2" />
                     <img onClick={() => clickCreateCategory(categoryName)} className="w-7 h-7 cursor-pointer" src="/images/addButton.png" alt="add icon" />
                 </div>
             </div>
             <div className="gap-4 mt-6 grid grid-cols-2">
                 {categories && categories.map((category, index) => {
                     return <div key={index} className="bg-gray-300 rounded-md p-3 flex justify-between shadow-md"><p>{category.name}</p>
-                        <img onClick={() => clickDeleteCategory(category.id)} className="w-5 cursor-pointer" src="/images/delete.png" alt="trash icon" />
+                        <img onClick={() => clickDeleteCategory(category.id)} className="w-5 h-5 cursor-pointer" src="/images/delete.png" alt="trash icon" />
                     </div>
                 })}
             </div>
