@@ -19,3 +19,11 @@ interface ICategory {
     name: string,
     enabled?: boolean
 }
+
+interface IProductCategory {
+    category: ICategory,
+    product: IProduct,
+    id: number,
+    categoryId: number,
+    productId: number  
+}
