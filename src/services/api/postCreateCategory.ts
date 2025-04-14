@@ -1,9 +1,9 @@
-interface postCreateCategory {
+interface PostCreateCategory {
     name: string,
     enabled?: boolean
 }
 
-const postCreateCategory = async (category: postCreateCategory): Promise<ICategory> => {
+const postCreateCategory = async (category: PostCreateCategory): Promise<ICategory> => {
     const response = await fetch("http://localhost:3001/category", {
         method: "POST",
         headers: {

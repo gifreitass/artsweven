@@ -1,12 +1,12 @@
 import getProductById from "@/services/api/getProductById"
 import { useEffect, useState } from "react"
 
-const useProduct = (productId: string | null) => {
+const useProduct = (productId: string) => {
     const [product, setProduct] = useState<IProduct>()
     const [isLoading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        if (!productId) {
+        if (productId === 'create') {
             return
         }
         const fetchData = async () => {

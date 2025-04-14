@@ -7,8 +7,7 @@ import useProduct from "@/hooks/useProduct"
 const EditProductPage: React.FC<{ productId: string }> = (props) => {
     const { isLoading: isLoadingProduct, product } = useProduct(props.productId)
     const { isLoading: isLoadingCategory, category } = useCategoryByProduct(props.productId)
-    console.log(category, props.productId)
-    //pegar a categoria pelo produto
+
     return (
         <div className="flex">
             <BackofficeNavBar />
@@ -17,7 +16,7 @@ const EditProductPage: React.FC<{ productId: string }> = (props) => {
                     {props.productId === 'create' ? <h1 className="font-semibold text-3xl">Criar produto</h1> :
                         <h1 className="font-semibold text-3xl">Editar {product?.name}</h1>}
                 </div>
-                {!isLoadingProduct && !isLoadingCategory && <ProductForm productId={props.productId} product={product} />}
+                {!isLoadingProduct && !isLoadingCategory && <ProductForm productId={props.productId} product={product} category={category} />}
             </div>
         </div>
     )

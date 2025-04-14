@@ -7,36 +7,36 @@ import MDEditor from "@uiw/react-md-editor"
 import { useParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
-import Select, { MultiValue } from 'react-select'
+import Select from 'react-select'
 import toast from "react-hot-toast"
 import * as z from 'zod'
-import { useState } from "react"
+import postCreateProductCategory from "@/services/api/postCreateProductCategory"
 
+//array de todas as categorias do produto
 const formSchema = z.object({
     name: z.string().min(1, 'Campo obrigatório'),
     value: z.coerce.number().min(1, 'O valor precisa ser maior que zero'),
     description: z.string().min(1, 'Campo obrigatório'),
     image: z.string().min(1, 'Campo obrigatório'),
-    categories: z.object({ value: z.string(), label: z.string() })
+    categories: z.array(z.object({ label: z.string(), value: z.string(), id: z.number() }))
 })
 
 type Schema = z.infer<typeof formSchema>
 
-const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props) => {
-    const { product } = props
+const ProductForm: React.FC<{ product?: IProduct, productId: string, category: ICategory[] }> = (props) => {
+    const { product, productId, category } = props
     const params = useParams()
     const router = useRouter()
+
+    //popula o seletor de categorias
     const { categories } = useCategoryList()
     const categoriesOptions = categories.map((category) => {
-        return { value: category.name, label: category.name }
+        return { value: category.name, label: category.name, id: category.id }
     })
 
-    const [ chosenCategories, setChosenCategories ] = useState({})
-
-    const handleChangeCategory = (newValue: MultiValue<{ value: string; label: string; }>) => {
-        setChosenCategories(newValue)
-        console.log(chosenCategories)
-    }
+    const defaultCategories = category.map((category) => {
+        return { value: category.name, label: category.name, id: category.id }
+    })
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<Schema>({
         resolver: zodResolver(formSchema),
@@ -44,12 +44,14 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props)
             name: product?.name,
             value: product?.value,
             description: product?.description,
-            image: product?.image
+            image: product?.image,
+            categories: defaultCategories
         },
     })
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
+        
         // novo produto - criar produto
         if (params.id === 'create') {
             try {
@@ -59,6 +61,12 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props)
                     value: data.value,
                     image: data.image
                 })
+                const postCategories = data.categories.map((category) => {
+                    return { categoryId: category.id, productId: createdProduct.id }
+                })
+                await Promise.all(postCategories.map(async (item) => {
+                    await postCreateProductCategory(item)
+                }))
                 toast.success('Produto criado')
                 router.push('/backoffice/products')
             } catch (error) {
@@ -73,7 +81,7 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props)
 
         // produto existente - atualizar produto
         try {
-            const updatedProduct = await putProduct(Number(props.productId), {
+            await putProduct(Number(productId), {
                 name: data.name,
                 description: data.description,
                 value: data.value,
@@ -121,13 +129,13 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string }> = (props)
 
             {/* category select */}
             <label className="text-sm font-semibold" htmlFor="categories">Categorias</label>
-            {/* <select multiple className="h-10 rounded-md border border-[#273056] p-2 cursor-pointer" name="categories" id="category-select">
-                <option value="none">sem categoria</option>
-                {categories.map((category, index) => {
-                    return <option key={index} value={category.name}>{category.name}</option>
-                })}
-            </select> */}
-            { categories.length > 0 && <Select onChange={handleChangeCategory} name="categories" isMulti options={categoriesOptions} /> } 
+            {categories.length > 0 && <Controller
+                name="categories"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => <Select defaultValue={field.value} onChange={field.onChange} isMulti options={categoriesOptions} />} />}
+            {errors.categories && <span className="text-sm text-red-700 font-semibold">{errors.categories.message}</span>}
+
             <button type="submit" className="mt-4 w-fit flex items-center gap-2 bg-[#273056] px-4 py-2 rounded-md text-white font-medium">Salvar alterações</button>
         </form>
     )

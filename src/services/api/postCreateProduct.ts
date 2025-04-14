@@ -5,7 +5,7 @@ interface PostCreateProduct {
     image: string
 }
 
-const postCreateProduct = async (product: PostCreateProduct) => {
+const postCreateProduct = async (product: PostCreateProduct): Promise<IProductDb> => {
     const response = await fetch("http://localhost:3001/product", {
         method: "POST",
         headers: {
@@ -20,7 +20,7 @@ const postCreateProduct = async (product: PostCreateProduct) => {
         throw new Error(result.error.message)
     }
 
-    return result
+    return result.data
 }
 
 export default postCreateProduct
