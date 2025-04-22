@@ -11,6 +11,7 @@ import Select from 'react-select'
 import toast from "react-hot-toast"
 import * as z from 'zod'
 import postCreateProductCategory from "@/services/api/postCreateProductCategory"
+import deleteProductCategory from "@/services/api/deleteProductCategory"
 
 //array de todas as categorias do produto
 const formSchema = z.object({
@@ -51,7 +52,6 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
-        
         // novo produto - criar produto
         if (params.id === 'create') {
             try {
@@ -87,6 +87,15 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
                 value: data.value,
                 image: data.image
             })
+            if (category.length > 0) {
+                await deleteProductCategory(Number(productId))
+            }
+            const putCategories = data.categories.map((category) => {
+                return { categoryId: category.id, productId: Number(productId) }
+            })
+            await Promise.all(putCategories.map(async (item) => {
+                await postCreateProductCategory(item)
+            }))
             toast.success('Produto atualizado')
         } catch (error) {
             if (error instanceof Error) {

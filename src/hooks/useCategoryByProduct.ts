@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 //tipar id e o state da categoria
 const useCategoryByProduct = (productId: string) => {
-    const [ category, setCategory ] = useState<ICategory[]>([])
+    const [category, setCategory] = useState<ICategory[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const useCategoryByProduct = (productId: string) => {
         fetchData()
     }, [productId])
 
-    return { category, isLoading  }
+    return { category, isLoading }
 }
 
 export default useCategoryByProduct
