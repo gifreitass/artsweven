@@ -23,7 +23,7 @@ const useProduct = (productId: string) => {
         }
         fetchData()
     }, [productId])
-
+    
     return { product, isLoading }
 }
 

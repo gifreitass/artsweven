@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 
 const EditCategories = () => {
     const [categoryName, setCategoryName] = useState<string>('')
-    const { categories, addCategory, removeCategory } = useCategoryList()
+    const { categories, fetch } = useCategoryList()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategoryName(event.target.value)
@@ -19,9 +19,9 @@ const EditCategories = () => {
                 name: category,
                 enabled: true
             })
-            addCategory(createdCategory)
             setCategoryName('')
             toast.success('Categoria criada')
+            fetch()
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -34,8 +34,8 @@ const EditCategories = () => {
     const clickDeleteCategory = async (categoryId: number) => {
         try {
             await deleteCategory(categoryId)
-            removeCategory(categoryId)
             toast.success('Categoria deletada')
+            fetch()
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)

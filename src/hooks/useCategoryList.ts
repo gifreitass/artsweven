@@ -5,13 +5,10 @@ import toast from "react-hot-toast"
 const useCategoryList = () => {
     const [categories, setCategories] = useState<ICategory[]>([])
 
-    useEffect(() => {
+    const fetch = async () => {
         try {
-            const fetchData = async () => {
-                const result = await getCategories()
-                setCategories(result)
-            }
-            fetchData()
+            const result = await getCategories()
+            setCategories(result)
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -19,18 +16,13 @@ const useCategoryList = () => {
             }
             toast.error("Erro ao obter categorias")
         }
+    }
+
+    useEffect(() => {
+        fetch()
     }, [])
 
-    const addCategory = (newCategory: ICategory) => {
-        setCategories([...categories, newCategory])
-    }
-
-    const removeCategory = (categoryId: number) => {
-        const removedCategory = categories.filter((category) => category.id !== categoryId)
-        setCategories(removedCategory)
-    }
-
-    return { categories, addCategory, removeCategory }
+    return { categories, fetch }
 }
 
 export default useCategoryList

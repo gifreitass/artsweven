@@ -18,7 +18,7 @@ const formSchema = z.object({
     name: z.string().min(1, 'Campo obrigatório'),
     value: z.coerce.number().min(1, 'O valor precisa ser maior que zero'),
     description: z.string().min(1, 'Campo obrigatório'),
-    image: z.string().min(1, 'Campo obrigatório'),
+    image: z.string().url('URL inválida').min(1, 'Campo obrigatório'),
     categories: z.array(z.object({ label: z.string(), value: z.string(), id: z.number() }))
 })
 

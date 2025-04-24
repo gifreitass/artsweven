@@ -3,18 +3,15 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 const useProductList = () => {
-    const [products, setProducts] = useState<IProduct[]>()
+    const [products, setProducts] = useState<IProduct[]>([])
     const [loading, setLoading] = useState<boolean>(false)
 
-    useEffect(() => {
+    const fetch = async () => {
         try {
-            const fetchData = async () => {
-                setLoading(true)
-                const result = await getProducts()
-                setLoading(false)
-                setProducts(result)
-            }
-            fetchData()
+            setLoading(true)
+            const result = await getProducts()
+            setLoading(false)
+            setProducts(result)
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -22,9 +19,13 @@ const useProductList = () => {
             }
             toast.error("Erro ao obter produtos")
         }
+    }
+
+    useEffect(() => {
+        fetch()
     }, [])
 
-    return { products, loading }
+    return { products, loading, fetch }
 }
 
 export default useProductList
