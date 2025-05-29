@@ -12,13 +12,14 @@ import toast from "react-hot-toast"
 import * as z from 'zod'
 import postCreateProductCategory from "@/services/api/postCreateProductCategory"
 import deleteProductCategory from "@/services/api/deleteProductCategory"
+import postCreateProductImage from "@/services/api/postCreateProductImage"
 
 //array de todas as categorias do produto
 const formSchema = z.object({
     name: z.string().min(1, 'Campo obrigatório'),
     value: z.coerce.number().min(1, 'O valor precisa ser maior que zero'),
     description: z.string().min(1, 'Campo obrigatório'),
-    image: z.string().url('URL inválida').min(1, 'Campo obrigatório'),
+    image: z.any(),
     categories: z.array(z.object({ label: z.string(), value: z.string(), id: z.number() }))
 })
 
@@ -85,8 +86,10 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
                 name: data.name,
                 description: data.description,
                 value: data.value,
-                image: data.image
             })
+            const formData = new FormData()
+            formData.append("photo", data.image[0])
+            await postCreateProductImage(formData, Number(productId))
             if (category.length > 0) {
                 await deleteProductCategory(Number(productId))
             }
@@ -107,7 +110,7 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
     }
 
     return (
-        <form onSubmit={handleSubmit(submitForm)} className="w-4/5 bg-white mt-10 rounded-md p-6 flex flex-col gap-3">
+        <form encType="multipart/form-data" onSubmit={handleSubmit(submitForm)} className="w-4/5 bg-white mt-10 rounded-md p-6 flex flex-col gap-3">
             <p className="text-xl font-semibold">Detalhes</p>
 
             {/* name input */}
@@ -122,8 +125,8 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
             {/* image input */}
             <label className="text-sm font-semibold" htmlFor="image">Imagem</label>
-            <input className="h-8 rounded-md border border-[#273056] p-2" {...register("image", { required: "Campo obrigatório" })} type="text" />
-            {errors.image && <span className="text-sm text-red-700 font-semibold">{errors.image.message}</span>}
+            <input className="h-12 rounded-md border border-[#273056] p-2" {...register("image", { required: "Campo obrigatório" })} type="file" />
+            {errors.image && <span className="text-sm text-red-700 font-semibold"></span>}
 
             {/* description input */}
             <p className="text-sm font-semibold">Descrição</p>

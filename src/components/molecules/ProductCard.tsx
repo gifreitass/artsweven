@@ -27,7 +27,7 @@ const ProductCard: React.FC<{ name: string, value: number, image: string, id: nu
             </Modal>}
             <div className="bg-white rounded-lg px-7 py-5 flex justify-between items-center">
                 <div className="flex gap-6 items-center">
-                    <img className="w-20 h-20 rounded-md shadow-md" src={image} alt="product" />
+                    <img className="w-20 h-20 rounded-md shadow-md" src={`http://localhost:3001/${image}`} alt="product" />
                     <div>
                         <p className="font-medium">{name}</p>
                         <p>R${value}</p>

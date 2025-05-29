@@ -2,7 +2,6 @@ interface PutCreateProduct {
     name: string,
     value: number,
     description: string,
-    image: string
 }
 
 const putProduct = async (productId: number, product: PutCreateProduct) => {

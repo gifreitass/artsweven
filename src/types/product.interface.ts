@@ -3,7 +3,7 @@ interface IProduct {
     name: string,
     description: string,
     value: number,
-    image: string
+    image: any
 }
 
 interface IProductDb {
