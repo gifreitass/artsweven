@@ -13,6 +13,8 @@ import * as z from 'zod'
 import postCreateProductCategory from "@/services/api/postCreateProductCategory"
 import deleteProductCategory from "@/services/api/deleteProductCategory"
 import postCreateProductImage from "@/services/api/postCreateProductImage"
+import { useMemo, useState } from "react"
+import { URL } from "node:url"
 
 //array de todas as categorias do produto
 const formSchema = z.object({
@@ -29,6 +31,7 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
     const { product, productId, category } = props
     const params = useParams()
     const router = useRouter()
+    const [previewUrl, setPreviewUrl] = useState<string>()
 
     //popula o seletor de categorias
     const { categories } = useCategoryList()
@@ -40,7 +43,7 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
         return { value: category.name, label: category.name, id: category.id }
     })
 
-    const { register, handleSubmit, control, formState: { errors } } = useForm<Schema>({
+    const { register, handleSubmit, control, watch, formState: { errors } } = useForm<Schema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: product?.name,
@@ -50,6 +53,15 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
             categories: defaultCategories
         },
     })
+
+    const imageFile = watch('image')
+
+    // const imagePreviewUrl = useMemo(() => {
+    //     if (imageFile) {
+    //         const url = window.URL.createObjectURL(imageFile)
+    //     }
+    //     return undefined
+    // }, [imageFile])
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
@@ -125,6 +137,7 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
             {/* image input */}
             <label className="text-sm font-semibold" htmlFor="image">Imagem</label>
+            <img className="w-32 rounded-md shadow-md" src={`http://localhost:3001/${product?.image}`} alt="product" />
             <input className="h-12 rounded-md border border-[#273056] p-2" {...register("image", { required: "Campo obrigatório" })} type="file" />
             {errors.image && <span className="text-sm text-red-700 font-semibold"></span>}
 
