@@ -13,8 +13,7 @@ import * as z from 'zod'
 import postCreateProductCategory from "@/services/api/postCreateProductCategory"
 import deleteProductCategory from "@/services/api/deleteProductCategory"
 import postCreateProductImage from "@/services/api/postCreateProductImage"
-import { useMemo, useState } from "react"
-import { URL } from "node:url"
+import { useEffect, useState } from "react"
 
 //array de todas as categorias do produto
 const formSchema = z.object({
@@ -56,12 +55,15 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
     const imageFile = watch('image')
 
-    // const imagePreviewUrl = useMemo(() => {
-    //     if (imageFile) {
-    //         const url = window.URL.createObjectURL(imageFile)
-    //     }
-    //     return undefined
-    // }, [imageFile])
+    useEffect(() => {
+        const file = imageFile?.[0]
+        if (file instanceof File) {
+            const url = URL.createObjectURL(file)
+            setPreviewUrl(url)
+        } else {
+            setPreviewUrl(undefined)
+        }
+    }, [imageFile])
 
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
@@ -137,8 +139,10 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
             {/* image input */}
             <label className="text-sm font-semibold" htmlFor="image">Imagem</label>
-            <img className="w-32 rounded-md shadow-md" src={`http://localhost:3001/${product?.image}`} alt="product" />
-            <input className="h-12 rounded-md border border-[#273056] p-2" {...register("image", { required: "Campo obrigatório" })} type="file" />
+            {previewUrl ? <img className="w-32 rounded-md shadow-md" src={previewUrl} alt="product" />
+                : <img className="w-32 rounded-md shadow-md" src={`http://localhost:3001/${product?.image}`} alt="product" />
+            }
+            <input className="h-10 text-sm rounded-md border file:h-10 file:text-white file:bg-[#273056] file:cursor-pointer file:font-medium file:px-4 file:py-2 file:leading-tight file:rounded-l-md" {...register("image", { required: "Campo obrigatório" })} type="file" />
             {errors.image && <span className="text-sm text-red-700 font-semibold"></span>}
 
             {/* description input */}
