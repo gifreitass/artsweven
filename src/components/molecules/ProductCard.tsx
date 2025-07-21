@@ -13,7 +13,7 @@ const ProductCard: React.FC<{ name: string, value: number, image: string, id: nu
     return (
         <>
             {isModal && <Modal handleClickButton={toggleModal}>
-                <div className="flex flex-col items-center gap-5">
+                <div className="flex flex-col items-center gap-8">
                     <img className="w-14" src="/images/trash-modal.png" alt="trash image" />
                     <p className="font-medium">Tem certeza que deseja excluir o produto?</p>
                 </div>

@@ -65,6 +65,8 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
         }
     }, [imageFile])
 
+    console.log(previewUrl)
+
     //sempre tratar o erro no componente
     const submitForm = async (data: Schema) => {
         // novo produto - criar produto
@@ -74,8 +76,10 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
                     name: data.name,
                     description: data.description,
                     value: data.value,
-                    image: data.image
                 })
+                const formData = new FormData()
+                formData.append("photo", data.image[0])
+                await postCreateProductImage(formData, Number(createdProduct.id))
                 const postCategories = data.categories.map((category) => {
                     return { categoryId: category.id, productId: createdProduct.id }
                 })
@@ -139,8 +143,11 @@ const ProductForm: React.FC<{ product?: IProduct, productId: string, category: I
 
             {/* image input */}
             <label className="text-sm font-semibold" htmlFor="image">Imagem</label>
-            {previewUrl ? <img className="w-32 rounded-md shadow-md" src={previewUrl} alt="product" />
-                : <img className="w-32 rounded-md shadow-md" src={`http://localhost:3001/${product?.image}`} alt="product" />
+            {previewUrl
+                ? <img className="w-32 rounded-md shadow-md" src={previewUrl} alt="product" />
+                : product?.image
+                    ? <img className="w-32 rounded-md shadow-md" src={`http://localhost:3001/${product?.image}`} alt="product" />
+                    : null
             }
             <input className="h-10 text-sm rounded-md border file:h-10 file:text-white file:bg-[#273056] file:cursor-pointer file:font-medium file:px-4 file:py-2 file:leading-tight file:rounded-l-md" {...register("image", { required: "Campo obrigatório" })} type="file" />
             {errors.image && <span className="text-sm text-red-700 font-semibold"></span>}

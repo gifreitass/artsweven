@@ -2,7 +2,6 @@ interface PostCreateProduct {
     name: string,
     value: number,
     description: string,
-    image: any
 }
 
 const postCreateProduct = async (product: PostCreateProduct): Promise<IProductDb> => {
