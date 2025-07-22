@@ -1,4 +1,4 @@
-import CategoriesPage from "@/components/templates/CategoriesPage"
+import CategoriesPage from "@/components/templates/BackofficeCategoriesPage"
 
 const Categories = () => {
     return (

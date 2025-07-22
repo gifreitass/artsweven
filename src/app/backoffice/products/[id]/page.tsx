@@ -1,5 +1,5 @@
 "use client"
-import EditProductPage from "@/components/templates/EditProductPage"
+import EditProductPage from "@/components/templates/BackofficeEditProductPage"
 import { useParams } from "next/navigation"
 
 type Params = {
