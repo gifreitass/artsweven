@@ -1,4 +1,4 @@
-import ProductsPage from "@/components/templates/BackofficeProductsPage"
+import ProductsPage from "@/components/templates/ProductsPage"
 
 const Products = () => {
     return (
