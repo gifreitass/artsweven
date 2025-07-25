@@ -1,7 +1,7 @@
-import SiteHomePage from "@/components/templates/SiteHomepage";
+import SiteProductsPage from "@/components/templates/SiteProductsPage";
 
 export default function Home() {
   return (
-    <SiteHomePage />
+    <SiteProductsPage />
   );
 }

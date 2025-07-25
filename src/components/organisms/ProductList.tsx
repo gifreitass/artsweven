@@ -1,6 +1,6 @@
 "use client"
 import deleteProductCategory from "@/services/api/deleteProductCategory"
-import ProductCard from "../molecules/ProductCard"
+import ProductCard from "../molecules/BackofficeProductCard"
 import useProductList from "@/hooks/useProductList"
 import deleteProduct from "@/services/api/deleteProduct"
 import toast from "react-hot-toast"
