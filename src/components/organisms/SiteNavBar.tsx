@@ -29,9 +29,7 @@ const SiteNavBar = () => {
                     </div>
                 </div>
             </div>
-            {/* <div className="bg-white w-full h-[1px]"></div> */}
             <div className="text-white flex justify-evenly text-[13px] border-t-[1px] pt-3">
-                {/* páginas do site com link para a página */}
                 {categories && categories.map((category, index) => {
                     return <Link key={index} href={`/pages/${(category.id).toString()}`}><p>{category.name}</p></Link>
                 })}
